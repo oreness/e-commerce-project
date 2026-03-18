@@ -11,12 +11,17 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
         <a class="navbar-brand fw-bold" href="#"><span class="text-warning">⚡ Electro</span>Hub</a>
-        <div class="collapse navbar-collapse justify-content-end">
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item"><a class="nav-link" href="#">Search</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Categories</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Login / Register</a></li>
-                <li class="nav-item"><a class="btn btn-warning btn-sm ms-3 fw-bold" href="#">🛒 Cart (0)</a></li>
+                <li class="nav-item mt-2 mt-lg-0"><a class="btn btn-warning btn-sm ms-lg-3 fw-bold" href="#">🛒 Cart (0)</a></li>
             </ul>
         </div>
     </div>
@@ -110,6 +115,6 @@
 <footer class="bg-dark text-white text-center py-4 mt-auto">
     <div class="container"><p class="mb-0 text-muted small">&copy; 2026 ElectroHub</p></div>
 </footer>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
