@@ -34,31 +34,65 @@
     <div class="row g-4">
         <div class="col-lg-8">
             <h4 class="mb-3">Items in Cart</h4>
+            
             <div class="card shadow-sm border-0 mb-3">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <img src="https://placehold.co/80x80/e9ecef/495057?text=Img" alt="Product 1" class="rounded me-3">
-                        <div class="flex-grow-1">
+                    <div class="row align-items-center g-3">
+                        <div class="col-auto">
+                            <img src="https://placehold.co/80x80/e9ecef/495057?text=Img" alt="Product 1" class="rounded">
+                        </div>
+                        <div class="col">
                             <h5 class="mb-0 fw-bold">Pro Gaming Mouse</h5>
                             <p class="text-muted small mb-0">Ergonomic RGB mouse</p>
                         </div>
-                        <div class="fw-bold fs-5">€15.00</div>
+                        <div class="col-auto">
+                            <div class="input-group input-group-sm" style="width: 120px;">
+                                <button class="btn btn-outline-secondary" type="button">-</button>
+                                <input type="number" class="form-control text-center" value="1" min="1">
+                                <button class="btn btn-outline-secondary" type="button">+</button>
+                            </div>
+                        </div>
+                        <div class="col-auto text-end" style="width: 90px;">
+                            <span class="fw-bold fs-5">€15.00</span>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-sm btn-outline-danger" title="Remove item">
+                                🗑️
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card shadow-sm border-0">
+            <div class="card shadow-sm border-0 mb-3">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <img src="https://placehold.co/80x80/e9ecef/495057?text=Img" alt="Product 2" class="rounded me-3">
-                        <div class="flex-grow-1">
+                    <div class="row align-items-center g-3">
+                        <div class="col-auto">
+                            <img src="https://placehold.co/80x80/e9ecef/495057?text=Img" alt="Product 2" class="rounded">
+                        </div>
+                        <div class="col">
                             <h5 class="mb-0 fw-bold">Mechanical Keyboard</h5>
                             <p class="text-muted small mb-0">Blue switches, TKL</p>
                         </div>
-                        <div class="fw-bold fs-5">€20.00</div>
+                        <div class="col-auto">
+                            <div class="input-group input-group-sm" style="width: 120px;">
+                                <button class="btn btn-outline-secondary" type="button">-</button>
+                                <input type="number" class="form-control text-center" value="1" min="1">
+                                <button class="btn btn-outline-secondary" type="button">+</button>
+                            </div>
+                        </div>
+                        <div class="col-auto text-end" style="width: 90px;">
+                            <span class="fw-bold fs-5">€20.00</span>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-sm btn-outline-danger" title="Remove item">
+                                🗑️
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+            
         </div>
 
         <div class="col-lg-4">
