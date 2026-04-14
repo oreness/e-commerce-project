@@ -31,15 +31,20 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4 text-center">
                     <div class="bg-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:60px;height:60px;font-size:1.5rem;">👤</div>
-                    <h6 class="fw-bold mb-0">John Doe</h6>
-                    <p class="text-muted small"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8de7e2e5e3cde8f5ece0fde1e8a3eee2e0">[email&#160;protected]</a></p>
+                    <h6 class="fw-bold mb-0">{{ auth()->user()->name }}</h6>
+                    <p class="text-muted small">{{ auth()->user()->email }}</p>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item bg-light"><a href="{{ url('/account') }}" class="text-decoration-none fw-bold text-dark">👤 My Account</a></li>
                     <li class="list-group-item"><a href="{{ url('/orders') }}" class="text-decoration-none text-dark">📦 My Orders</a></li>
                     <li class="list-group-item"><a href="{{ url('/wishlist') }}" class="text-decoration-none text-dark">♡ Wishlist</a></li>
                     <li class="list-group-item"><a href="#" class="text-decoration-none text-dark">📍 Addresses</a></li>
-                    <li class="list-group-item"><a href="{{ url('/login') }}" class="text-decoration-none text-danger">🚪 Log Out</a></li>
+                    <li class="list-group-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-link p-0 text-decoration-none text-danger">🚪 Log Out</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -53,15 +58,15 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="firstName" class="form-label fw-bold small">First Name</label>
-                            <input type="text" id="firstName" class="form-control" value="John">
+                            <input type="text" id="firstName" class="form-control" value="{{ auth()->user()->name }}">
                         </div>
                         <div class="col-md-6">
                             <label for="lastName" class="form-label fw-bold small">Last Name</label>
-                            <input type="text" id="lastName" class="form-control" value="Doe">
+                            <input type="text" id="lastName" class="form-control" value="">
                         </div>
                         <div class="col-md-6">
                             <label for="emailAddress" class="form-label fw-bold small">Email Address</label>
-                            <input type="email" id="emailAddress" class="form-control" value="john@example.com">
+                            <input type="email" id="emailAddress" class="form-control" value="{{ auth()->user()->email }}">
                         </div>
                         <div class="col-md-6">
                             <label for="phoneNumber" class="form-label fw-bold small">Phone Number</label>
