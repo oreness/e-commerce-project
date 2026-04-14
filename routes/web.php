@@ -1,55 +1,25 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('index');
+Route::get('/', fn () => view('index'))->name('home');
+
+Route::view('/shop', 'products')->name('shop.index');
+Route::view('/product/{slug}', 'product-detail')->name('product.show');
+Route::view('/contact', 'contact')->name('contact');
+Route::view('/search', 'search')->name('search');
+
+Route::middleware('auth')->group(function () {
+    Route::view('/account', 'account')->name('account.index');
+    Route::view('/cart', 'cart')->name('cart.index');
+    Route::view('/checkout', 'checkout')->name('checkout.index');
+    Route::view('/orders', 'orders')->name('orders.index');
+    Route::view('/wishlist', 'wishlist')->name('wishlist.index');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/search', function () {
-    return view('search');
-});
-Route::get('/products', function () {
-    return view('products');
-});
-Route::get('/product-detail', function () {
-    return view('product-detail');
-});
-
-Route::get('/cart', function () {
-    return view('cart');
-});
-Route::get('/checkout', function () {
-    return view('checkout');
-});
-Route::get('/order-confirmation', function () {
-    return view('order-confirmation');
-});
-
-Route::get('/login', function () {
-    return view('login');
-});
-Route::get('/account', function () {
-    return view('account');
-});
-Route::get('/orders', function () {
-    return view('orders');
-});
-Route::get('/wishlist', function () {
-    return view('wishlist');
-});
-
-Route::get('/contact', function () {
-    return view('contact');
-});
-
-Route::get('/admin-products', function () {
-    return view('admin-products');
-});
-Route::get('/admin-product-form', function () {
-    return view('admin-product-form');
-});
-
-Route::get('/404', function () {
-    return view('404');
-});
+require __DIR__.'/auth.php';
