@@ -31,15 +31,20 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4 text-center">
                     <div class="bg-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:60px;height:60px;font-size:1.5rem;">👤</div>
-                    <h6 class="fw-bold mb-0">John Doe</h6>
-                    <p class="text-muted small"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8de7e2e5e3cde8f5ece0fde1e8a3eee2e0">[email&#160;protected]</a></p>
+                    <h6 class="fw-bold mb-0">{{ Auth::user()->name }}</h6>
+                    <p class="text-muted small">{{ Auth::user()->email }}</p>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item bg-light"><a href="{{ url('/account') }}" class="text-decoration-none fw-bold text-dark">👤 My Account</a></li>
                     <li class="list-group-item"><a href="{{ url('/orders') }}" class="text-decoration-none text-dark">📦 My Orders</a></li>
                     <li class="list-group-item"><a href="{{ url('/wishlist') }}" class="text-decoration-none text-dark">♡ Wishlist</a></li>
                     <li class="list-group-item"><a href="#" class="text-decoration-none text-dark">📍 Addresses</a></li>
-                    <li class="list-group-item"><a href="{{ url('/login') }}" class="text-decoration-none text-danger">🚪 Log Out</a></li>
+                    <li class="list-group-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-link text-danger text-decoration-none p-0 w-100 text-start">🚪 Logout</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -47,52 +52,32 @@
         <div class="col-lg-9">
             <h2 class="fw-bold mb-4">My Account</h2>
 
+            @if (session('status'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('status') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
                     <h5 class="fw-bold mb-4">Personal Information</h5>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="firstName" class="form-label fw-bold small">First Name</label>
-                            <input type="text" id="firstName" class="form-control" value="John">
+                            <label for="firstName" class="form-label fw-bold small">Name</label>
+                            <input type="text" id="firstName" class="form-control" value="{{ Auth::user()->name }}" disabled>
                         </div>
                         <div class="col-md-6">
-                            <label for="lastName" class="form-label fw-bold small">Last Name</label>
-                            <input type="text" id="lastName" class="form-control" value="Doe">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="emailAddress" class="form-label fw-bold small">Email Address</label>
-                            <input type="email" id="emailAddress" class="form-control" value="john@example.com">
+                            <label for="emailAddress" class="form-label fw-bold small">Email</label>
+                            <input type="email" id="emailAddress" class="form-control" value="{{ Auth::user()->email }}" disabled>
                         </div>
                         <div class="col-md-6">
                             <label for="phoneNumber" class="form-label fw-bold small">Phone Number</label>
-                            <input type="tel" id="phoneNumber" class="form-control" placeholder="+421 000 000 000">
+                            <input type="tel" id="phoneNumber" class="form-control" placeholder="+000 000 000 000">
                         </div>
                     </div>
                     <div class="mt-3 text-end">
-                        <button class="btn btn-dark px-4">Save Changes</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-4">Change Password</h5>
-                    <div class="row g-3">
-                        <div class="col-md-12">
-                            <label for="currentPassword" class="form-label fw-bold small">Current Password</label>
-                            <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="newPassword" class="form-label fw-bold small">New Password</label>
-                            <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="confirmPassword" class="form-label fw-bold small">Confirm New Password</label>
-                            <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat new password">
-                        </div>
-                    </div>
-                    <div class="mt-3 text-end">
-                        <button class="btn btn-dark px-4">Update Password</button>
+                        <a href="{{ route('profile.edit') }}" class="btn btn-dark px-4">Edit Profile</a>
                     </div>
                 </div>
             </div>
@@ -102,7 +87,7 @@
                     <h5 class="fw-bold mb-4">Notification Preferences</h5>
                     <div class="form-check form-switch mb-2">
                         <input class="form-check-input" type="checkbox" id="n1" checked>
-                        <label class="form-check-label" for="n1">Order updates & shipping notifications</label>
+                        <label class="form-check-label" for="n1">Order updates and shipping notifications</label>
                     </div>
                     <div class="form-check form-switch mb-2">
                         <input class="form-check-input" type="checkbox" id="n2" checked>
@@ -110,7 +95,7 @@
                     </div>
                     <div class="form-check form-switch mb-2">
                         <input class="form-check-input" type="checkbox" id="n3">
-                        <label class="form-check-label" for="n3">New product arrivals</label>
+                        <label class="form-check-label" for="n3">New products</label>
                     </div>
                     <div class="mt-3 text-end">
                         <button class="btn btn-dark px-4">Save Preferences</button>
@@ -131,7 +116,7 @@
 
 <footer class="bg-dark text-white text-center py-4 mt-auto">
     <div class="container">
-        <p class="mb-2">About Us | Contact</p>
+        <p class="mb-2">About Us | <a href="{{ url('/contact') }}" class="text-white text-decoration-none">Contact</a></p>
         <p class="mb-0 text-muted small">&copy; 2026 ElectroHub</p>
     </div>
 </footer>
