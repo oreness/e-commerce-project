@@ -20,8 +20,30 @@
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item"><a class="nav-link" href="{{ url('/search') }}">Search</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('/products') }}">Categories</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">Login / Register</a></li>
-                <li class="nav-item mt-2 mt-lg-0"><a class="btn btn-warning btn-sm ms-lg-3 fw-bold" href="{{ url('/cart') }}">🛒 Cart (0)</a></li>
+
+                {{-- CAMBIO AQUÍ: Lógica de autenticación --}}
+                @guest
+                    {{-- Si el usuario NO está logueado --}}
+                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
+                @endguest
+
+                @auth
+                    {{-- Si el usuario YA está logueado --}}
+                    <li class="nav-item"><a class="nav-link active" href="{{ url('/account') }}">My Account</a></li>
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                            @csrf
+                            <button type="submit" class="nav-link btn btn-link text-white border-0" style="text-decoration: none; padding: 0 1rem;">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                @endauth
+
+                <li class="nav-item mt-2 mt-lg-0">
+                    <a class="btn btn-warning btn-sm ms-lg-3 fw-bold" href="{{ url('/cart') }}">🛒 Cart (0)</a>
+                </li>
             </ul>
         </div>
     </div>
