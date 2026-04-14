@@ -8,22 +8,7 @@
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ url('/') }}"><span class="text-warning">⚡ Electro</span>Hub</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item"><a class="nav-link" href="{{ url('/search') }}">Search</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/products') }}">Categories</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">Login / Register</a></li>
-                <li class="nav-item mt-2 mt-lg-0"><a class="btn btn-warning btn-sm ms-lg-3 fw-bold" href="{{ url('/cart') }}">🛒 Cart (2)</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+@include('partials.navbar')
 
 <main class="container my-5">
     <div class="mb-4">
