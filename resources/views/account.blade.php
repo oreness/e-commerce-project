@@ -57,16 +57,16 @@
                     <h5 class="fw-bold mb-4">Personal Information</h5>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="firstName" class="form-label fw-bold small">First Name</label>
+                            <label for="firstName" class="form-label fw-bold small">Full Name</label>
                             <input type="text" id="firstName" class="form-control" value="{{ auth()->user()->name }}">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="lastName" class="form-label fw-bold small">Last Name</label>
-                            <input type="text" id="lastName" class="form-control" value="">
                         </div>
                         <div class="col-md-6">
                             <label for="emailAddress" class="form-label fw-bold small">Email Address</label>
                             <input type="email" id="emailAddress" class="form-control" value="{{ auth()->user()->email }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phoneNumber" class="form-label fw-bold small">Phone Number</label>
+                            <input type="tel" id="phoneNumber" class="form-control" placeholder="+421 000 000 000">
                         </div>
                         <div class="col-md-6">
                             <label for="phoneNumber" class="form-label fw-bold small">Phone Number</label>
