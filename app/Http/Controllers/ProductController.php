@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,13 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query();
+        $query = Product::with('category');
+
+        if ($request->filled('category')) {
+            $query->whereHas('category', function ($q) use ($request) {
+                $q->where('slug', $request->category);
+            });
+        }
 
         // 1. Búsqueda (Cambiamos 'has' por 'filled')
         if ($request->filled('search')) {
@@ -44,10 +51,12 @@ class ProductController extends Controller
         }
 
         $products = $query->paginate(12);
+        $categories = Category::query()->orderBy('name')->get();
+        $brands = Product::query()->select('brand')->distinct()->orderBy('brand')->pluck('brand');
 
         $view = $request->routeIs('search') ? 'search' : 'products';
 
-        return view($view, compact('products'));
+        return view($view, compact('products', 'categories', 'brands'));
     }
 
     public function show($id)

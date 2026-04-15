@@ -24,17 +24,17 @@
         <h2 class="h3 mb-4 text-center">Shop by Category</h2>
         <div class="row g-4 text-center">
             <div class="col-md-4">
-                <a href="{{ url('/products') }}" class="text-decoration-none text-dark">
+                <a href="{{ route('products.index', ['category' => 'laptops']) }}" class="text-decoration-none text-dark">
                     <div class="p-4 bg-white shadow-sm rounded border soft-enter"><h5>💻 Laptops</h5></div>
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="{{ url('/products') }}" class="text-decoration-none text-dark">
+                <a href="{{ route('products.index', ['category' => 'accessories']) }}" class="text-decoration-none text-dark">
                     <div class="p-4 bg-white shadow-sm rounded border soft-enter"><h5>🖱️ Accessories</h5></div>
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="{{ url('/products') }}" class="text-decoration-none text-dark">
+                <a href="{{ route('products.index', ['category' => 'monitors']) }}" class="text-decoration-none text-dark">
                     <div class="p-4 bg-white shadow-sm rounded border soft-enter"><h5>🖥️ Monitors</h5></div>
                 </a>
             </div>

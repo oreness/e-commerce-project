@@ -14,6 +14,9 @@
 <main class="container my-5">
     <div class="mb-4">
         <h1 class="fw-bold page-title">Our Catalog</h1>
+        @if(request('category'))
+            <p class="text-muted mb-1">Category: <strong>{{ ucfirst(request('category')) }}</strong></p>
+        @endif
         @if(request('search'))
             <p class="text-muted mb-1">Results for: "<strong>{{ request('search') }}</strong>"</p>
         @endif
@@ -27,6 +30,9 @@
     @endif
 
     <form action="{{ route('products.index') }}" method="GET" class="row g-2 mb-4">
+        @if(request('category'))
+            <input type="hidden" name="category" value="{{ request('category') }}">
+        @endif
         <div class="col-lg-8">
             <input type="text" name="search" class="form-control" placeholder="Search products by name or description" value="{{ request('search') }}">
         </div>
@@ -42,12 +48,20 @@
                 <div class="card-body">
                     <input type="hidden" name="search" value="{{ request('search') }}">
 
+                    <h6 class="fw-bold">Category</h6>
+                    <select name="category" class="form-select form-select-sm mb-3">
+                        <option value="">All Categories</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->slug }}" {{ request('category') === $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+
                     <h6 class="fw-bold">Brand</h6>
                     <select name="brand" class="form-select form-select-sm mb-3">
                         <option value="">All Brands</option>
-                        <option value="Asus" {{ request('brand') == 'Asus' ? 'selected' : '' }}>Asus</option>
-                        <option value="Lenovo" {{ request('brand') == 'Lenovo' ? 'selected' : '' }}>Lenovo</option>
-                        <option value="MSI" {{ request('brand') == 'MSI' ? 'selected' : '' }}>MSI</option>
+                        @foreach($brands as $brand)
+                            <option value="{{ $brand }}" {{ request('brand') === $brand ? 'selected' : '' }}>{{ $brand }}</option>
+                        @endforeach
                     </select>
 
                     <h6 class="fw-bold">Price Range</h6>
