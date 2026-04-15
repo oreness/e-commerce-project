@@ -5,28 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ElectroHub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <x-ui-polish-styles />
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ url('/') }}"><span class="text-warning">⚡ Electro</span>Hub</a>
-        <div class="collapse navbar-collapse justify-content-end">
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item"><a class="nav-link" href="{{ url('/search') }}">Search</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/products') }}">Categories</a></li>
-                <li class="nav-item"><a class="nav-link active" href="{{ route('login') }}">Login</a></li>
-                <li class="nav-item mt-2 mt-lg-0"><a class="btn btn-warning btn-sm ms-lg-3 fw-bold" href="{{ url('/cart') }}">🛒 Cart (0)</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<x-storefront-navbar />
 
 <main class="container my-auto py-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
             <div class="text-center mb-4">
-                <h1 class="fw-bold">Login</h1>
+                <h1 class="fw-bold page-title">Login</h1>
                 <p class="text-muted">Access your ElectroHub account</p>
             </div>
             <div class="card shadow-sm border-0">

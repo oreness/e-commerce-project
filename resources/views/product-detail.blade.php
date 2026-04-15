@@ -3,41 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Gaming X - ElectroHub</title>
+    <title>{{ $product->name }} - ElectroHub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <x-ui-polish-styles />
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ url('/') }}"><span class="text-warning">⚡ Electro</span>Hub</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item"><a class="nav-link" href="{{ url('/search') }}">Search</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/products') }}">Categories</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">Login / Register</a></li>
-                <li class="nav-item mt-2 mt-lg-0"><a class="btn btn-warning btn-sm ms-lg-3 fw-bold" href="{{ url('/cart') }}">🛒 Cart (2)</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<x-storefront-navbar />
 
 <main class="container my-5">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show soft-enter" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ url('/products') }}">Laptops</a></li>
-            <li class="breadcrumb-item active">Pro Gaming X</li>
+            <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a></li>
+            <li class="breadcrumb-item active">{{ $product->name }}</li>
         </ol>
     </nav>
 
     <div class="row g-5">
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm mb-3">
-                <img src="https://placehold.co/600x450/e9ecef/495057?text=Pro+Gaming+X" class="card-img-top rounded" alt="Pro Gaming X">
+                <img src="{{ $product->image_url ?? 'https://placehold.co/600x450?text=Product' }}" class="card-img-top rounded" alt="{{ $product->name }}">
             </div>
             <div class="d-flex gap-2">
                 <img src="https://placehold.co/120x90/dee2e6/495057?text=View+1" class="rounded border border-dark" style="cursor:pointer;width:80px;" alt="thumb1">
@@ -48,25 +41,25 @@
 
         <div class="col-lg-6">
             <span class="badge bg-success mb-2">In Stock</span>
-            <h1 class="fw-bold mb-1">Pro Gaming X</h1>
-            <p class="text-muted mb-3">by <a href="#" class="text-decoration-none">ASUS</a></p>
+            <h1 class="fw-bold mb-1 page-title">{{ $product->name }}</h1>
+            <p class="text-muted mb-3">by <span class="text-decoration-none">{{ $product->brand }}</span></p>
 
             <div class="d-flex align-items-center gap-2 mb-3">
                 <span class="text-warning fs-5">★★★★☆</span>
                 <span class="text-muted small">(128 reviews)</span>
             </div>
 
-            <h2 class="fw-bold text-primary mb-1">€1,299.00</h2>
+            <h2 class="fw-bold text-primary mb-1">€{{ number_format($product->price, 2) }}</h2>
             <p class="text-muted small mb-4">Incl. VAT. Free shipping on orders over €100.</p>
 
             <div class="mb-4">
                 <h6 class="fw-bold mb-2">Key Specs</h6>
                 <ul class="list-unstyled text-muted small">
-                    <li>🖥️ 15.6" FHD 144Hz IPS Display</li>
-                    <li>⚡ Intel Core i7-13700H</li>
-                    <li>🎮 NVIDIA RTX 4060 8GB</li>
-                    <li>💾 16GB DDR5 RAM | 512GB NVMe SSD</li>
-                    <li>🔋 90Wh Battery</li>
+                    <li>🖥️ Product quality and performance information</li>
+                    <li>⚡ Brand: {{ $product->brand }}</li>
+                    <li>🎮 Great for everyday use and store demos</li>
+                    <li>💾 Description: {{ $product->description }}</li>
+                    <li>🔋 Ready for checkout and cart testing</li>
                 </ul>
             </div>
 
@@ -78,17 +71,16 @@
                 </div>
             </div>
 
-            <div class="d-flex gap-3 mb-3">
+            <form action="{{ route('cart.add', $product->id) }}" method="POST" class="d-flex gap-3 mb-3">
+                @csrf
                 <div class="input-group" style="max-width:130px;">
                     <button class="btn btn-outline-secondary" type="button" onclick="changeQty(-1)">−</button>
-                    <input type="number" id="qty" class="form-control text-center" value="1" min="1">
+                    <input type="number" id="qty" name="quantity" class="form-control text-center" value="1" min="1">
                     <button class="btn btn-outline-secondary" type="button" onclick="changeQty(1)">+</button>
                 </div>
-                <button class="btn btn-dark flex-grow-1 fw-bold" onclick="addToCart()">🛒 Add to Cart</button>
-            </div>
+                <button type="submit" class="btn btn-dark flex-grow-1 fw-bold">🛒 Add to Cart</button>
+            </form>
             <button class="btn btn-outline-dark w-100 mb-2">♡ Add to Wishlist</button>
-
-            <div id="cartMsg" class="alert alert-success d-none mt-2 py-2 text-center small">Added to cart!</div>
         </div>
     </div>
 
@@ -100,8 +92,8 @@
         </ul>
         <div class="tab-content bg-white border border-top-0 rounded-bottom p-4 shadow-sm">
             <div class="tab-pane fade show active" id="desc">
-                <p>The Pro Gaming X is engineered for elite performance, featuring ASUS's advanced thermal architecture to keep you cool under pressure. With a 144Hz display and RTX 4060, it delivers buttery smooth gameplay and stunning visuals. Perfect for gamers who demand the best without compromise.</p>
-                <p class="text-muted">Comes with a 2-year manufacturer warranty and 30-day return policy.</p>
+                <p>{{ $product->description }}</p>
+                <p class="text-muted">Comes with standard store warranty and return policy information.</p>
             </div>
             <div class="tab-pane fade" id="specs">
                 <table class="table table-striped table-sm">
@@ -150,11 +142,6 @@
         const input = document.getElementById('qty');
         const newVal = Math.max(1, parseInt(input.value) + delta);
         input.value = newVal;
-    }
-    function addToCart() {
-        const msg = document.getElementById('cartMsg');
-        msg.classList.remove('d-none');
-        setTimeout(() => msg.classList.add('d-none'), 2500);
     }
 </script>
 </body>

@@ -5,118 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart - ElectroHub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <x-ui-polish-styles />
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ url('/') }}"><span class="text-warning">⚡ Electro</span>Hub</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item"><a class="nav-link" href="{{ url('/search') }}">Search</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/products') }}">Categories</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">Login / Register</a></li>
-                <li class="nav-item mt-2 mt-lg-0"><a class="btn btn-warning btn-sm ms-lg-3 fw-bold" href="{{ url('/cart') }}">🛒 Cart (2)</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<x-storefront-navbar />
 
 <main class="container my-5">
     <div class="mb-4">
-        <h1 class="fw-bold">Your Shopping Cart</h1>
+        <h1 class="fw-bold page-title">Your Shopping Cart</h1>
         <p class="text-muted">Review your selected items before proceeding to checkout.</p>
     </div>
 
-    <div class="row g-4">
-        <div class="col-lg-8">
-            <h4 class="mb-3">Items in Cart</h4>
-
-            <div class="card shadow-sm border-0 mb-3">
-                <div class="card-body">
-                    <div class="row align-items-center g-3">
-                        <div class="col-auto">
-                            <img src="https://placehold.co/80x80/e9ecef/495057?text=Img" alt="Product 1" class="rounded">
-                        </div>
-                        <div class="col">
-                            <h5 class="mb-0 fw-bold">Pro Gaming Mouse</h5>
-                            <p class="text-muted small mb-0">Ergonomic RGB mouse</p>
-                        </div>
-                        <div class="col-auto">
-                            <div class="input-group input-group-sm" style="width: 120px;">
-                                <button class="btn btn-outline-secondary" type="button">-</button>
-                                <input type="number" class="form-control text-center" value="1" min="1">
-                                <button class="btn btn-outline-secondary" type="button">+</button>
-                            </div>
-                        </div>
-                        <div class="col-auto text-end" style="width: 90px;">
-                            <span class="fw-bold fs-5">€15.00</span>
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-sm btn-outline-danger" title="Remove item">
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card shadow-sm border-0 mb-3">
-                <div class="card-body">
-                    <div class="row align-items-center g-3">
-                        <div class="col-auto">
-                            <img src="https://placehold.co/80x80/e9ecef/495057?text=Img" alt="Product 2" class="rounded">
-                        </div>
-                        <div class="col">
-                            <h5 class="mb-0 fw-bold">Mechanical Keyboard</h5>
-                            <p class="text-muted small mb-0">Blue switches, TKL</p>
-                        </div>
-                        <div class="col-auto">
-                            <div class="input-group input-group-sm" style="width: 120px;">
-                                <button class="btn btn-outline-secondary" type="button">-</button>
-                                <input type="number" class="form-control text-center" value="1" min="1">
-                                <button class="btn btn-outline-secondary" type="button">+</button>
-                            </div>
-                        </div>
-                        <div class="col-auto text-end" style="width: 90px;">
-                            <span class="fw-bold fs-5">€20.00</span>
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-sm btn-outline-danger" title="Remove item">
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show soft-enter" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+    @endif
 
-        <div class="col-lg-4">
-            <div class="card shadow-sm border-0 bg-white">
-                <div class="card-body p-4">
-                    <h4 class="mb-4">Order Summary</h4>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span>Subtotal</span>
-                        <span class="fw-bold">€35.00</span>
+    @if(count($cart) > 0)
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <h4 class="mb-3">Items in Cart</h4>
+
+                @foreach($cart as $id => $details)
+                    <div class="card shadow-sm border-0 mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center g-3">
+                                <div class="col-auto">
+                                    <img src="{{ $details['image'] ?? 'https://placehold.co/80x80?text=No+Image' }}" alt="{{ $details['name'] }}" class="rounded" style="width: 80px; height: 80px; object-fit: cover;">
+                                </div>
+                                <div class="col">
+                                    <h5 class="mb-0 fw-bold">{{ $details['name'] }}</h5>
+                                    <p class="text-muted small mb-0">Unit Price: €{{ number_format($details['price'], 2) }}</p>
+                                </div>
+                                <div class="col-auto">
+                                    <form action="{{ route('cart.update', $id) }}" method="POST" class="d-flex align-items-center gap-2">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="number" name="quantity" value="{{ $details['quantity'] }}" min="1" class="form-control form-control-sm" style="width: 90px;">
+                                        <button type="submit" class="btn btn-sm btn-outline-dark">Update</button>
+                                    </form>
+                                </div>
+                                <div class="col-auto text-end" style="width: 110px;">
+                                    <span class="fw-bold fs-5">€{{ number_format($details['price'] * $details['quantity'], 2) }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <form action="{{ route('cart.remove', $id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Remove item">🗑️</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span>Shipping</span>
-                        <span class="text-muted">Calculated at checkout</span>
+                @endforeach
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 bg-white">
+                    <div class="card-body p-4">
+                        <h4 class="mb-4">Order Summary</h4>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Subtotal</span>
+                            <span class="fw-bold">€{{ number_format($total, 2) }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Shipping</span>
+                            <span class="text-success fw-bold">FREE</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-bold fs-5">Total Price</span>
+                            <span class="fw-bold fs-5 text-primary">€{{ number_format($total, 2) }}</span>
+                        </div>
+                        <a href="{{ url('/checkout') }}" class="btn btn-dark w-100 py-2 fw-bold">Proceed to Checkout</a>
                     </div>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-4">
-                        <span class="fw-bold fs-5">Total Price</span>
-                        <span class="fw-bold fs-5 text-primary">€35.00</span>
-                    </div>
-                    <a href="{{ url('/checkout') }}" class="btn btn-dark w-100 py-2 fw-bold">Proceed to Checkout</a>
                 </div>
             </div>
         </div>
-    </div>
+    @else
+        <div class="text-center py-5 shadow-sm bg-white rounded">
+            <h3>Your cart is empty 🛒</h3>
+            <p class="text-muted">Looks like you haven't added anything yet.</p>
+            <a href="{{ url('/products') }}" class="btn btn-warning fw-bold">Browse Products</a>
+        </div>
+    @endif
 </main>
 
 <footer class="bg-dark text-white text-center py-4 mt-auto">

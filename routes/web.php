@@ -1,19 +1,31 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductController; // 1. Importa el nuevo controlador
+use App\Http\Controllers\CartController;    // 2. Importa el controlador del carrito
 use Illuminate\Support\Facades\Route;
 
 // Rutas públicas
 Route::get('/', fn () => view('index'))->name('home');
-Route::view('/products', 'products')->name('products.index');
-Route::view('/product-detail', 'product-detail')->name('product.show');
+
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/search', [ProductController::class, 'index'])->name('search');
+
+// 4. CAMBIO: Ruta dinámica para ver el detalle de UN producto específico usando su ID
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+
 Route::view('/contact', 'contact')->name('contact');
-Route::view('/search', 'search')->name('search');
 
 // Rutas que requieren autenticación
 Route::middleware('auth')->group(function () {
     Route::view('/account', 'account')->name('account.index');
-    Route::view('/cart', 'cart')->name('cart.index');
+
+    // 5. CAMBIO: Rutas para la lógica del carrito
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
     Route::view('/checkout', 'checkout')->name('checkout.index');
     Route::view('/order-confirmation', 'order-confirmation')->name('order.confirmation');
     Route::view('/orders', 'orders')->name('orders.index');
@@ -24,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Rutas de administración (requieren autenticación)
+// Rutas de administración
 Route::middleware('auth')->group(function () {
     Route::view('/admin-products', 'admin-products')->name('admin.products.index');
     Route::view('/admin-product-form', 'admin-product-form')->name('admin.products.form');
