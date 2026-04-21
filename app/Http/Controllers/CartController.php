@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
 use App\Models\Product;
 
 class CartController extends Controller
 {
     public function index()
     {
+        $this->hydrateSessionCartFromDbIfNeeded();
+
         $cart = session()->get('cart', []);
         $total = 0;
         foreach($cart as $item) {
@@ -27,6 +31,7 @@ class CartController extends Controller
             $cart[$id]['quantity'] += $quantity;
         } else {
             $cart[$id] = [
+                "id" => $product->id,
                 "name" => $product->name,
                 "quantity" => $quantity,
                 "price" => $product->price,
@@ -35,6 +40,7 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
+        $this->persistCartIfAuthenticated($cart);
         return redirect()->back()->with('success', 'Product added to cart.');
     }
 
@@ -49,6 +55,7 @@ class CartController extends Controller
         $cart[$id]['quantity'] = max(1, (int) $request->input('quantity', 1));
 
         session()->put('cart', $cart);
+        $this->persistCartIfAuthenticated($cart);
 
         return redirect()->back()->with('success', 'Quantity updated.');
     }
@@ -59,7 +66,35 @@ class CartController extends Controller
         if(isset($cart[$id])) {
             unset($cart[$id]);
             session()->put('cart', $cart);
+            $this->persistCartIfAuthenticated($cart);
         }
         return redirect()->back()->with('success', 'Product removed from cart.');
+    }
+
+    private function hydrateSessionCartFromDbIfNeeded(): void
+    {
+        if (!Auth::check()) {
+            return;
+        }
+
+        if (!empty(session('cart', []))) {
+            return;
+        }
+
+        $dbCart = Cart::query()->where('user_id', Auth::id())->value('items') ?? [];
+
+        session(['cart' => $dbCart]);
+    }
+
+    private function persistCartIfAuthenticated(array $cart): void
+    {
+        if (!Auth::check()) {
+            return;
+        }
+
+        Cart::updateOrCreate(
+            ['user_id' => Auth::id()],
+            ['items' => $cart]
+        );
     }
 }

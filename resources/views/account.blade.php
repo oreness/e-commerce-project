@@ -21,6 +21,8 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item bg-light"><a href="{{ url('/account') }}" class="text-decoration-none fw-bold text-dark">👤 My Account</a></li>
+                    <li class="list-group-item"><a href="{{ route('orders.index') }}" class="text-decoration-none text-dark">📦 My Orders</a></li>
+                    <li class="list-group-item"><a href="{{ route('wishlist.index') }}" class="text-decoration-none text-dark">♡ Wishlist</a></li>
                     <li class="list-group-item">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -37,6 +39,17 @@
                     <h5 class="fw-bold mb-4">Personal Information</h5>
                     <p><strong>Name:</strong> {{ Auth::user()->name }}</p>
                     <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Quick Access</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ route('orders.index') }}" class="btn btn-outline-dark btn-sm">View Orders</a>
+                        <a href="{{ route('wishlist.index') }}" class="btn btn-outline-dark btn-sm">Open Wishlist</a>
+                        <a href="{{ route('cart.index') }}" class="btn btn-outline-dark btn-sm">Go to Cart</a>
+                    </div>
                 </div>
             </div>
         </div>
