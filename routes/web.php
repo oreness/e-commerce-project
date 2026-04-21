@@ -1,23 +1,21 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductController; // 1. Importa el nuevo controlador
-use App\Http\Controllers\CartController;    // 2. Importa el controlador del carrito
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AdminProductController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Route;
 
-// Rutas públicas
+
 Route::get('/', fn () => view('index'))->name('home');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/search', [ProductController::class, 'index'])->name('search');
-
-// 4. CAMBIO: Ruta dinámica para ver el detalle de UN producto específico usando su ID
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
 Route::view('/contact', 'contact')->name('contact');
 
-// Cart & checkout available for guests and authenticated users
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
@@ -27,7 +25,7 @@ Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.ind
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::view('/order-confirmation', 'order-confirmation')->name('order.confirmation');
 
-// Rutas que requieren autenticación
+
 Route::middleware('auth')->group(function () {
     Route::view('/account', 'account')->name('account.index');
     Route::view('/orders', 'orders')->name('orders.index');
@@ -38,10 +36,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Rutas de administración
-Route::middleware('auth')->group(function () {
-    Route::view('/admin-products', 'admin-products')->name('admin.products.index');
-    Route::view('/admin-product-form', 'admin-product-form')->name('admin.products.form');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin-products', [AdminProductController::class, 'index'])->name('admin.products.index');
+    Route::get('/admin-product-form', [AdminProductController::class, 'create'])->name('admin.products.form');
+    Route::post('/admin-products', [AdminProductController::class, 'store'])->name('admin.product.store');
+    Route::delete('/admin-products/{product}', [AdminProductController::class, 'destroy'])->name('admin.product.delete');
+
+    Route::get('/admin-product-form/{product}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/admin-products/{product}', [AdminProductController::class, 'update'])->name('admin.product.update');
 });
 
 require __DIR__.'/auth.php';

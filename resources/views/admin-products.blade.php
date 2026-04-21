@@ -21,7 +21,12 @@
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item"><a class="nav-link active fw-bold text-dark" href="{{ url('/admin-products') }}">Products</a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="#">Orders</a></li>
-                <li class="nav-item mt-2 mt-lg-0"><a class="btn btn-dark btn-sm ms-lg-3 fw-bold" href="{{ url('/login') }}">Logout</a></li>
+                <li class="nav-item mt-2 mt-lg-0">
+                    <form action="{{ url('/logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-dark btn-sm ms-lg-3 fw-bold">Logout</button>
+                    </form>
+                </li>
             </ul>
         </div>
     </div>
@@ -33,6 +38,12 @@
         <a href="{{ url('/admin-product-form') }}" class="btn btn-dark fw-bold">+ Add New Product</a>
     </div>
 
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -42,34 +53,42 @@
                         <th scope="col" class="ps-4">ID</th>
                         <th scope="col">Image</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Category</th>
+                        <th scope="col">Brand</th>
                         <th scope="col">Price</th>
                         <th scope="col" class="text-end pe-4">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td class="ps-4 fw-bold">#101</td>
-                        <td><img src="https://placehold.co/50x50/e9ecef/495057" class="rounded" alt="Thumbnail"></td>
-                        <td>Pro Gaming X Laptop</td>
-                        <td>Laptops</td>
-                        <td>€1299</td>
-                        <td class="text-end pe-4">
-                            <a href="{{ url('/admin-product-form') }}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
-                            <button class="btn btn-sm btn-outline-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="ps-4 fw-bold">#102</td>
-                        <td><img src="https://placehold.co/50x50/e9ecef/495057" class="rounded" alt="Thumbnail"></td>
-                        <td>Ultra Wireless Mouse</td>
-                        <td>Accessories</td>
-                        <td>€49</td>
-                        <td class="text-end pe-4">
-                            <a href="{{ url('/admin-product-form') }}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
-                            <button class="btn btn-sm btn-outline-danger">Delete</button>
-                        </td>
-                    </tr>
+                    @forelse($products as $product)
+                        <tr>
+                            <td class="ps-4 fw-bold">#{{ $product->id }}</td>
+                            <td>
+                                @if($product->images->count() > 0)
+                                    <img src="{{ asset('storage/' . $product->images->first()->path) }}" class="rounded" alt="Thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                @else
+                                    <img src="https://placehold.co/50x50/e9ecef/495057?text=No+Img" class="rounded" alt="No image">
+                                @endif
+                            </td>
+                            <td>{{ $product->name }}</td>
+                            <td>{{ $product->brand }}</td>
+                            <td>€{{ number_format($product->price, 2) }}</td>
+                            <td class="text-end pe-4">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="{{ url('/admin-product-form/'.$product->id.'/edit') }}" class="btn btn-sm btn-outline-primary">Edit</a>
+
+                                    <form action="{{ route('admin.product.delete', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">No products available. Click "+ Add New Product" to start.</td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </div>
