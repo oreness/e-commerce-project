@@ -10,7 +10,7 @@
 
 <nav class="navbar navbar-expand-lg bg-warning shadow-sm" data-bs-theme="light">
     <div class="container">
-        <a class="navbar-brand fw-bold text-dark" href="{{ url('/admin-products') }}">
+        <a class="navbar-brand fw-bold text-dark" href="{{ route('admin.products.index') }}">
             ⚡ ElectroHub
             <span class="badge bg-dark text-warning ms-2 align-middle">ADMIN</span>
         </a>
@@ -19,12 +19,20 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
             <ul class="navbar-nav align-items-center">
+<<<<<<< Updated upstream
                 <li class="nav-item"><a class="nav-link active fw-bold text-dark" href="{{ url('/admin-products') }}">Products</a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="#">Orders</a></li>
                 <li class="nav-item mt-2 mt-lg-0">
                     <form action="{{ url('/logout') }}" method="POST" class="d-inline">
                         @csrf
                         <button type="submit" class="btn btn-dark btn-sm ms-lg-3 fw-bold">Logout</button>
+=======
+                <li class="nav-item"><a class="nav-link active fw-bold text-dark" href="{{ route('admin.products.index') }}">Products</a></li>
+                <li class="nav-item mt-2 mt-lg-0 ms-lg-3">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-dark btn-sm fw-bold">Logout</button>
+>>>>>>> Stashed changes
                     </form>
                 </li>
             </ul>
@@ -33,9 +41,23 @@
 </nav>
 
 <main class="container my-5">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-bold h2">Product Management</h1>
-        <a href="{{ url('/admin-product-form') }}" class="btn btn-dark fw-bold">+ Add New Product</a>
+        <a href="{{ route('admin.products.create') }}" class="btn btn-dark fw-bold">+ Add New Product</a>
     </div>
 
     @if(session('success'))
@@ -54,6 +76,7 @@
                         <th scope="col">Image</th>
                         <th scope="col">Name</th>
                         <th scope="col">Brand</th>
+                        <th scope="col">Category</th>
                         <th scope="col">Price</th>
                         <th scope="col" class="text-end pe-4">Actions</th>
                     </tr>
@@ -63,6 +86,7 @@
                         <tr>
                             <td class="ps-4 fw-bold">#{{ $product->id }}</td>
                             <td>
+<<<<<<< Updated upstream
                                 @if($product->images->count() > 0)
                                     <img src="{{ asset('storage/' . $product->images->first()->path) }}" class="rounded" alt="Thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
                                 @else
@@ -82,17 +106,41 @@
                                         <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                     </form>
                                 </div>
+=======
+                                <img src="{{ $product->primary_image_url ?? 'https://placehold.co/50x50/e9ecef/495057' }}" class="rounded" alt="{{ $product->name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                            </td>
+                            <td>{{ $product->name }}</td>
+                            <td>{{ $product->brand }}</td>
+                            <td>{{ $product->category?->name ?? '—' }}</td>
+                            <td>€{{ number_format($product->price, 2) }}</td>
+                            <td class="text-end pe-4">
+                                <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+
+                                <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this product and all images?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+>>>>>>> Stashed changes
                             </td>
                         </tr>
                     @empty
                         <tr>
+<<<<<<< Updated upstream
                             <td colspan="6" class="text-center py-4 text-muted">No products available. Click "+ Add New Product" to start.</td>
+=======
+                            <td colspan="7" class="text-center py-4 text-muted">No products found.</td>
+>>>>>>> Stashed changes
                         </tr>
                     @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
+    </div>
+
+    <div class="mt-4 d-flex justify-content-center">
+        {{ $products->links('pagination::bootstrap-5') }}
     </div>
 </main>
 

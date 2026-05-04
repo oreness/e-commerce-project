@@ -23,6 +23,11 @@
                         <a class="nav-link {{ request()->routeIs('register') ? 'active' : '' }}" href="{{ route('register') }}">Register</a>
                     </li>
                 @else
+                    @if(auth()->user()->is_admin)
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">Admin</a>
+                        </li>
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('account.index') ? 'active' : '' }}" href="{{ route('account.index') }}">My Account</a>
                     </li>

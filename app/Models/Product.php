@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -17,7 +17,7 @@ class Product extends Model
         'brand',
         'description',
         'price',
-        'color'
+        'image_url',
     ];
 
     public function category(): BelongsTo
@@ -27,6 +27,15 @@ class Product extends Model
 
     public function images(): HasMany
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function getPrimaryImageUrlAttribute(): ?string
+    {
+        if ($this->relationLoaded('images')) {
+            return $this->images->first()->path ?? $this->image_url;
+        }
+
+        return $this->images()->value('path') ?? $this->image_url;
     }
 }

@@ -7,7 +7,6 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('/', fn () => view('index'))->name('home');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
@@ -25,7 +24,6 @@ Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.ind
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::view('/order-confirmation', 'order-confirmation')->name('order.confirmation');
 
-
 Route::middleware('auth')->group(function () {
     Route::view('/account', 'account')->name('account.index');
     Route::view('/orders', 'orders')->name('orders.index');
@@ -38,12 +36,12 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin-products', [AdminProductController::class, 'index'])->name('admin.products.index');
-    Route::get('/admin-product-form', [AdminProductController::class, 'create'])->name('admin.products.form');
+    Route::get('/admin-product-form', [AdminProductController::class, 'create'])->name('admin.products.create');
     Route::post('/admin-products', [AdminProductController::class, 'store'])->name('admin.product.store');
-    Route::delete('/admin-products/{product}', [AdminProductController::class, 'destroy'])->name('admin.product.delete');
-
     Route::get('/admin-product-form/{product}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
     Route::put('/admin-products/{product}', [AdminProductController::class, 'update'])->name('admin.product.update');
+    Route::delete('/admin-products/{product}', [AdminProductController::class, 'destroy'])->name('admin.product.delete');
+    Route::delete('/admin-products/{product}/images/{image}', [AdminProductController::class, 'destroyImage'])->name('admin.products.images.destroy');
 });
 
 require __DIR__.'/auth.php';

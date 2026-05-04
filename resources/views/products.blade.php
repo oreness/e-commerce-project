@@ -88,7 +88,7 @@
                 @forelse($products as $product)
                     <article class="col-md-6 col-lg-4">
                         <div class="card h-100 shadow-sm border-0">
-                            <img src="{{ $product->image_url ?? 'https://placehold.co/400x300?text=Product' }}" class="card-img-top" alt="{{ $product->name }}">
+                            <img src="{{ $product->primary_image_url ?? 'https://placehold.co/400x300?text=Product' }}" class="card-img-top" alt="{{ $product->name }}">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">
                                     <a href="{{ route('product.show', $product->id) }}" class="text-dark text-decoration-none">

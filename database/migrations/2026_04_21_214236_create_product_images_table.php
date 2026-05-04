@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
-            // Conexión con la tabla productos
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            // Ruta de la imagen en la carpeta storage
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('path');
+            $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();
         });
     }

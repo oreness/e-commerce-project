@@ -30,13 +30,21 @@
     <div class="row g-5">
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm mb-3">
-                <img src="{{ $product->image_url ?? 'https://placehold.co/600x450?text=Product' }}" class="card-img-top rounded" alt="{{ $product->name }}">
+                <img id="mainProductImage" src="{{ $product->primary_image_url ?? 'https://placehold.co/600x450?text=Product' }}" class="card-img-top rounded" alt="{{ $product->name }}">
             </div>
-            <div class="d-flex gap-2">
-                <img src="https://placehold.co/120x90/dee2e6/495057?text=View+1" class="rounded border border-dark" style="cursor:pointer;width:80px;" alt="thumb1">
-                <img src="https://placehold.co/120x90/dee2e6/495057?text=View+2" class="rounded border" style="cursor:pointer;width:80px;" alt="thumb2">
-                <img src="https://placehold.co/120x90/dee2e6/495057?text=View+3" class="rounded border" style="cursor:pointer;width:80px;" alt="thumb3">
-            </div>
+            @if($product->images->isNotEmpty())
+                <div class="d-flex gap-2 flex-wrap">
+                    @foreach($product->images as $index => $image)
+                        <img
+                            src="{{ $image->path }}"
+                            class="rounded border {{ $index === 0 ? 'border-dark' : '' }}"
+                            style="cursor:pointer;width:80px;"
+                            alt="{{ $product->name }} image {{ $index + 1 }}"
+                            onclick="setMainImage(this)"
+                        >
+                    @endforeach
+                </div>
+            @endif
         </div>
 
         <div class="col-lg-6">
@@ -142,6 +150,17 @@
         const input = document.getElementById('qty');
         const newVal = Math.max(1, parseInt(input.value) + delta);
         input.value = newVal;
+    }
+
+    function setMainImage(el) {
+        const mainImage = document.getElementById('mainProductImage');
+        mainImage.src = el.src;
+
+        document.querySelectorAll('[onclick="setMainImage(this)"]').forEach(img => {
+            img.classList.remove('border-dark');
+        });
+
+        el.classList.add('border-dark');
     }
 </script>
 </body>

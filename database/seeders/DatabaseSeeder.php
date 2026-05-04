@@ -4,12 +4,24 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        User::query()->updateOrCreate(
+            ['email' => 'admin@electrohub.local'],
+            [
+                'name' => 'Admin User',
+                'password' => Hash::make('Admin12345!'),
+                'is_admin' => true,
+            ]
+        );
+
         $categories = [
             'laptops' => Category::query()->updateOrCreate(['slug' => 'laptops'], ['name' => 'Laptops']),
             'accessories' => Category::query()->updateOrCreate(['slug' => 'accessories'], ['name' => 'Accessories']),
@@ -40,7 +52,15 @@ class DatabaseSeeder extends Seeder
                 'image_url' => $this->resolveProductImage($product['image_key']),
             ];
 
-            Product::updateOrCreate(['name' => $product['name']], $payload);
+            $savedProduct = Product::updateOrCreate(['name' => $product['name']], $payload);
+
+            if ($savedProduct->image_url && !$savedProduct->images()->exists()) {
+                ProductImage::create([
+                    'product_id' => $savedProduct->id,
+                    'path' => $savedProduct->image_url,
+                    'sort_order' => 0,
+                ]);
+            }
         }
     }
 
