@@ -63,7 +63,6 @@
 
     <div class="card shadow-sm border-0 max-w-lg">
         <div class="card-body p-4 p-md-5">
-<<<<<<< Updated upstream
             <form action="{{ $isEdit ? route('admin.product.update', $product->id) : route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @if($isEdit)

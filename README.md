@@ -1,77 +1,91 @@
-# E-commerce Project (Laravel SSR)
+# E-commerce Project
 
-Semester project e-shop with client storefront and admin zone.
+Laravel SSR semester project with a customer storefront and protected admin area.
 
-## Tech stack
+## Stack
 
-- Backend SSR: Laravel (PHP)
-- Database: MySQL (configured in [.env](.env))
+- Backend: Laravel / PHP
+- Database: MySQL
 - Frontend: Blade + Bootstrap 5
 
 ## Setup
 
-1. Install dependencies
-	 - `composer install`
-	 - `npm install`
-2. Configure environment
-	 - copy `.env.example` to `.env` (or use existing `.env`)
-	 - set DB credentials
-3. Generate key (if needed)
-	 - `php artisan key:generate`
-4. Run migrations + seeders
-	 - `php artisan migrate --seed`
-5. Run app
-	 - `php artisan serve`
+1. Install dependencies: `composer install` and `npm install`
+2. Copy `.env.example` to `.env` and set database credentials
+3. Generate the app key: `php artisan key:generate`
+4. Create tables and seed demo data: `php artisan migrate --seed`
+5. Run the app: `php artisan serve`
 
-## Seeded admin account
+## Demo account
 
-- Email: `admin@electrohub.local`
-- Password: `Admin12345!`
+- Admin email: `admin@electrohub.local`
+- Admin password: `Admin12345!`
 
-## Implemented use cases
+## Main features
 
-### Client part
+### Storefront
 
-- Product list from selected category
-	- filtering by category, brand, price range
-	- ordering by price asc/desc
-	- pagination
-- Product detail
-	- add to cart with quantity
-- Full-text search over product name/description
-- Cart
-	- item list
-	- quantity update
-	- item removal
-	- checkout form with shipping/payment + validation
-	- order completion
-	- guest checkout supported
-	- cart portability for logged-in users (session + DB merge)
-- Customer authentication
-	- registration, login, logout
+- Product catalog with category, brand, and price filters
+- Sorting by price ascending or descending
+- Product detail page with image gallery and add-to-cart form
+- Search by product name or description
+- Cart with update and remove actions
+- Checkout flow with shipping and payment validation
+- Guest checkout support
+- Cart persistence for logged-in users
+
+### Admin
+
+- Admin-only access via `is_admin`
+- Product list, create, edit, and delete
+- Multiple images per product with image removal
+- Minimum two images required for new products
+
+## Rubric mapping
+
+### Client section
+
+- Product list, filtering, sorting, and pagination
+- Product detail with gallery and add-to-cart
+- Search results page
+- Cart update/remove and checkout flow
+- Guest checkout and account login/logout
 
 ### Admin section
 
-- Admin-only access using `is_admin` role flag
-- Admin login/logout (standard auth login with admin role check)
-- Product list in admin
-- Create product
-	- name, brand, description, category (select), price
-	- upload at least 2 images
-- Edit product
-	- update attributes
-	- upload additional images
-	- image list with remove option
-- Delete product
-	- physical image deletion for uploaded files
+- Admin access protection
+- Admin product listing
+- Product creation with categories and multiple images
+- Product editing and image management
+- Product deletion with file cleanup
 
-## Data model note
+### Documentation
 
-Implemented entities include `users`, `categories`, `products`, `product_images`, `carts`, `orders`, `order_items`.
+- Project description
+- Database schema summary
+- Design decisions and setup notes
+- Screenshot list
+
+## Database schema
+
+- `users` — authentication and admin flag
+- `categories` — product categories
+- `products` — catalog items
+- `product_images` — gallery images per product
+- `carts` — saved carts for logged-in users
+- `orders` — customer orders
+- `order_items` — products per order
 
 ## Design decisions
 
-- Admin role implemented with `users.is_admin` (simple and explicit for course scope).
-- Product gallery implemented with separate `product_images` table.
-- Legacy `products.image_url` retained as a compatible primary image reference.
-- Cart portability implemented by persisting cart JSON for authenticated users and merging on login.
+- Admin access uses a boolean role flag for simplicity.
+- Product galleries use a separate table so a product can have multiple images.
+- The cart is stored in session for guests and synced to the database for logged-in users.
+- Orders are stored separately from carts so checkout history stays available.
+
+## Submission notes
+
+- Keep `.env` out of the repository; use `.env.example` as the template.
+- Put screenshots in [screenshots/](screenshots) and include the storefront, cart, checkout, account, orders, and admin pages.
+- Include the UML diagram in [UML_CLASS_DIAGRAM.md](UML_CLASS_DIAGRAM.md); export it as an image only if your teacher specifically asks for that format.
+

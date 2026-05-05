@@ -19,20 +19,13 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
             <ul class="navbar-nav align-items-center">
-<<<<<<< Updated upstream
-                <li class="nav-item"><a class="nav-link active fw-bold text-dark" href="{{ url('/admin-products') }}">Products</a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="#">Orders</a></li>
-                <li class="nav-item mt-2 mt-lg-0">
-                    <form action="{{ url('/logout') }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="btn btn-dark btn-sm ms-lg-3 fw-bold">Logout</button>
-=======
-                <li class="nav-item"><a class="nav-link active fw-bold text-dark" href="{{ route('admin.products.index') }}">Products</a></li>
+                <li class="nav-item">
+                    <a class="nav-link active fw-bold text-dark" href="{{ route('admin.products.index') }}">Products</a>
+                </li>
                 <li class="nav-item mt-2 mt-lg-0 ms-lg-3">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="btn btn-dark btn-sm fw-bold">Logout</button>
->>>>>>> Stashed changes
                     </form>
                 </li>
             </ul>
@@ -60,12 +53,6 @@
         <a href="{{ route('admin.products.create') }}" class="btn btn-dark fw-bold">+ Add New Product</a>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -86,27 +73,6 @@
                         <tr>
                             <td class="ps-4 fw-bold">#{{ $product->id }}</td>
                             <td>
-<<<<<<< Updated upstream
-                                @if($product->images->count() > 0)
-                                    <img src="{{ asset('storage/' . $product->images->first()->path) }}" class="rounded" alt="Thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
-                                @else
-                                    <img src="https://placehold.co/50x50/e9ecef/495057?text=No+Img" class="rounded" alt="No image">
-                                @endif
-                            </td>
-                            <td>{{ $product->name }}</td>
-                            <td>{{ $product->brand }}</td>
-                            <td>€{{ number_format($product->price, 2) }}</td>
-                            <td class="text-end pe-4">
-                                <div class="d-flex justify-content-end gap-2">
-                                    <a href="{{ url('/admin-product-form/'.$product->id.'/edit') }}" class="btn btn-sm btn-outline-primary">Edit</a>
-
-                                    <form action="{{ route('admin.product.delete', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                    </form>
-                                </div>
-=======
                                 <img src="{{ $product->primary_image_url ?? 'https://placehold.co/50x50/e9ecef/495057' }}" class="rounded" alt="{{ $product->name }}" style="width: 50px; height: 50px; object-fit: cover;">
                             </td>
                             <td>{{ $product->name }}</td>
@@ -116,21 +82,16 @@
                             <td class="text-end pe-4">
                                 <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
 
-                                <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this product and all images?');">
+                                <form action="{{ route('admin.product.delete', $product) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this product and all images?');">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-outline-danger">Delete</button>
                                 </form>
->>>>>>> Stashed changes
                             </td>
                         </tr>
                     @empty
                         <tr>
-<<<<<<< Updated upstream
-                            <td colspan="6" class="text-center py-4 text-muted">No products available. Click "+ Add New Product" to start.</td>
-=======
                             <td colspan="7" class="text-center py-4 text-muted">No products found.</td>
->>>>>>> Stashed changes
                         </tr>
                     @endforelse
                     </tbody>
