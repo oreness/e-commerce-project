@@ -5,10 +5,19 @@
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item"><a class="nav-link{{ request()->routeIs('search') ? ' active' : '' }}" href="{{ route('search') }}">Search</a></li>
-                <li class="nav-item"><a class="nav-link{{ request()->routeIs('products.*') ? ' active' : '' }}" href="{{ route('products.index') }}">Categories</a></li>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            {{-- Search bar (centre of navbar) --}}
+            <form class="d-flex mx-auto my-2 my-lg-0" method="GET" action="{{ route('products.index') }}" style="max-width:420px;width:100%;">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm bg-secondary border-secondary text-white" name="search"
+                           value="{{ request('search') }}" placeholder="Search products…" autocomplete="off"
+                           style="color-scheme:dark;">
+                    <button class="btn btn-warning btn-sm fw-bold" type="submit">🔍</button>
+                </div>
+            </form>
+
+            <ul class="navbar-nav align-items-center ms-lg-3">
+                <li class="nav-item"><a class="nav-link{{ request()->routeIs('products.*') ? ' active' : '' }}" href="{{ route('products.index') }}">Products</a></li>
                 @auth
                     <li class="nav-item"><a class="nav-link{{ request()->routeIs('account.index') ? ' active' : '' }}" href="{{ route('account.index') }}">My Account</a></li>
                     <li class="nav-item mt-2 mt-lg-0">
